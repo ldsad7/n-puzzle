@@ -1,14 +1,14 @@
 from typing import List, Optional, Tuple
 
-from npuzzle_gen import make_puzzle
-from puzzle import Puzzle
+from .npuzzle_gen import make_puzzle
+from .puzzle import Puzzle
 
 
 class PuzzleReader:
     def __init__(self, verbose: bool = False):
         self.verbose = verbose
 
-    def read(self, path: Optional[str], size: Optional[int]) -> Puzzle:
+    def read(self, path: Optional[str], size: Optional[int]) -> Tuple[Puzzle, int]:
         arr: List[int] = []
         if path is not None:
             arr, size = self._read_puzzle_from_file(path)
@@ -20,14 +20,14 @@ class PuzzleReader:
             self._validate_puzzle(arr, size)
         except AssertionError:
             raise ValueError(f"File '{path}' doesn't contain correct values from 0 to {size * size - 1}")
-        return Puzzle(arr=arr, size=size, prev_puzzle=None, cost=0)
+        return (arr, 0, None), size
 
     @staticmethod
     def _validate_puzzle(arr: List[int], size: int):
         assert set(arr) == set(range(size * size))
 
     @staticmethod
-    def _read_puzzle_from_file(path: str) -> Tuple[List[int], int]:
+    def _read_puzzle_from_file(path: str) -> Tuple[Tuple[int], int]:
         try:
             with open(path, 'r', encoding='utf-8') as f:
                 lines = f.read().splitlines()
@@ -51,8 +51,8 @@ class PuzzleReader:
             except ValueError as ex:
                 raise ValueError(f"line {i} of the file '{path}' doesn't contain correct values ({ex})")
             arr.extend(values)
-        return arr, size
+        return tuple(arr), size
 
     @staticmethod
-    def _gen_puzzle(size: int) -> List[int]:
+    def _gen_puzzle(size: int) -> Tuple[int]:
         return make_puzzle(size, solvable=True, iterations=10000)
