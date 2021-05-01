@@ -1,8 +1,12 @@
 import heapq
 from typing import List, Dict, Tuple, Set
 
-from .heuristics import Heuristic
-from .puzzle import Puzzle
+if __name__ == 'puzzle_solver':
+    from heuristics import Heuristic
+    from puzzle import Puzzle
+else:
+    from .heuristics import Heuristic
+    from .puzzle import Puzzle
 
 
 class PuzzleSolver:

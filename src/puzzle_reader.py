@@ -1,7 +1,11 @@
 from typing import List, Optional, Tuple
 
-from .npuzzle_gen import make_puzzle
-from .puzzle import Puzzle
+if __name__ == 'puzzle_reader':
+    from npuzzle_gen import make_puzzle
+    from puzzle import Puzzle
+else:
+    from .npuzzle_gen import make_puzzle
+    from .puzzle import Puzzle
 
 
 class PuzzleReader:

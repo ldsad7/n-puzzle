@@ -2,7 +2,10 @@ import argparse
 import random
 from typing import List, Tuple
 
-from .puzzle_solver import PuzzleSolver
+if __name__ == '__main__':
+    from puzzle_solver import PuzzleSolver
+else:
+    from .puzzle_solver import PuzzleSolver
 
 
 def swap_empty(p: List[int], size: int) -> None:
