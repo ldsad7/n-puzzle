@@ -24,7 +24,7 @@ def swap_empty(p: List[int], size: int) -> None:
     p[swi] = 0
 
 
-def make_puzzle(size: int, solvable: bool, iterations: int) -> Tuple[int]:
+def make_puzzle(size: int, solvable: bool, iterations: int) -> Tuple[int, ...]:
     arr = make_start_arr(size)
     for _ in range(iterations):
         swap_empty(arr, size)
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     random.seed()
 
-    puzzle: Tuple[int] = make_puzzle(args.size, solvable=args.solvable, iterations=args.iterations)
+    puzzle: Tuple[int, ...] = make_puzzle(args.size, solvable=args.solvable, iterations=args.iterations)
 
     print(f"# This puzzle is {'solvable' if args.solvable else 'unsolvable'}")
     print(args.size)

@@ -1,0 +1,11 @@
+# This puzzle is solvable
+4
+ 0 10  9 12
+ 8  5  2  7
+11  1  4 13
+15  3 14  6
+
+# -f=linear_conflict
+# Complexity in time: 482979
+# Complexity in size: 264029
+# Steps: 56

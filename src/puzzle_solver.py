@@ -1,4 +1,5 @@
 import heapq
+import time
 from typing import List, Dict, Tuple, Set
 
 if __name__ == 'puzzle_solver':
@@ -36,15 +37,16 @@ class PuzzleSolver:
             print('\nis not solvable')
 
     @staticmethod
-    def print(arr: Tuple[int], size: int) -> None:
+    def print(arr: Tuple[int, ...], size: int) -> None:
         width = len(str(size ** 2))
         for i in range(size):
             for j in range(size - 1):
                 print(str(arr[j + i * size]).rjust(width), end=' ')
             print(str(arr[size - 1 + i * size]).rjust(width))
 
-    def print_full_path(self, puzzle: Puzzle, complexity_in_time: int, complexity_in_size: int) -> None:
-        path: List[Tuple[int]] = []
+    def print_full_path(self, puzzle: Puzzle, complexity_in_time: int, complexity_in_size: int,
+                        passed_time: float) -> None:
+        path: List[Tuple[int, ...]] = []
         while puzzle is not None:
             path.append(puzzle[0])
             puzzle = puzzle[2]
@@ -52,11 +54,10 @@ class PuzzleSolver:
         for arr in path[-2::-1]:
             print('>')
             self.print(arr, self.size)
-        print(f'Complexity in time: {complexity_in_time}')
-        print(f'Complexity in size: {complexity_in_size}')
-        print(f'Steps: {len(path) - 1}')
+        print(f'Complexity in time: {complexity_in_time}\nComplexity in size: {complexity_in_size}\n'
+              f'Steps: {len(path) - 1}\nPassed time: {passed_time} sec')
 
-    def get_adjacent_arrays(self, arr: Tuple[int]) -> Set[Tuple[int]]:
+    def get_adjacent_arrays(self, arr: Tuple[int, ...]) -> Set[Tuple[int, ...]]:
         index = arr.index(0)
         directions = []
         if (index % self.size) > 0:  # left
@@ -77,25 +78,27 @@ class PuzzleSolver:
 
     def a_star(self, puzzle: Puzzle) -> None:
         # TODO: let users send final_puzzle here
-        final_puzzle: Puzzle = (tuple(list(range(1, self.size ** 2)) + [0]), 0, None)
-        open_set: Dict[Tuple[int], Tuple[int, float]] = {
-            puzzle[0]: (puzzle[1], self.heuristic(puzzle, final_puzzle, self.size))
+        start_time = time.time()
+        final_arr: Tuple[int, ...] = tuple(list(range(1, self.size ** 2)) + [0])
+        open_set: Dict[Tuple[int], Tuple[float, float]] = {
+            puzzle[0]: (puzzle[1], self.heuristic(puzzle[0], final_arr, self.size))
         }
+        closed_set: Set[Tuple[int, ...]] = set()
         queue: List[Tuple[float, Puzzle]] = [(sum(open_set[puzzle[0]]), puzzle)]
-        closed_set: Set[Tuple[int]] = set()
         while queue:
             _, node_puzzle = heapq.heappop(queue)
-            if node_puzzle[0] == final_puzzle[0]:
-                return self.print_full_path(
-                    node_puzzle, complexity_in_time=len(open_set), complexity_in_size=len(closed_set)
-                )
             closed_set.add(node_puzzle[0])
+            if node_puzzle[0] == final_arr:
+                return self.print_full_path(
+                    node_puzzle, complexity_in_time=len(open_set), complexity_in_size=len(closed_set),
+                    passed_time=time.time() - start_time
+                )
             for new_arr in self.get_adjacent_arrays(node_puzzle[0]) - closed_set:
                 if new_arr not in open_set:
-                    new_puzzle = (new_arr, node_puzzle[1] + self.step, node_puzzle)
-                    open_set[new_arr] = (new_puzzle[1], self.heuristic(new_puzzle, final_puzzle, self.size))
+                    new_puzzle = (new_arr, self.step + node_puzzle[1], node_puzzle)
+                    open_set[new_arr] = (new_puzzle[1], self.heuristic(new_puzzle[0], final_arr, self.size))
                     heapq.heappush(queue, (sum(open_set[new_arr]), new_puzzle))
-                elif (node_puzzle[1] + self.step) < open_set[new_arr][0]:
-                    open_set[new_arr] = (node_puzzle[1] + self.step, open_set[new_arr][1])
+                elif (self.step + node_puzzle[1]) < open_set[new_arr][0]:
+                    open_set[new_arr] = (self.step + node_puzzle[1], open_set[new_arr][1])
                     new_puzzle = (new_arr, open_set[new_arr][0], node_puzzle)
                     heapq.heappush(queue, (sum(open_set[new_arr]), new_puzzle))

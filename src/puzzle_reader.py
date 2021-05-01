@@ -31,7 +31,7 @@ class PuzzleReader:
         assert set(arr) == set(range(size * size))
 
     @staticmethod
-    def _read_puzzle_from_file(path: str) -> Tuple[Tuple[int], int]:
+    def _read_puzzle_from_file(path: str) -> Tuple[Tuple[int, ...], int]:
         try:
             with open(path, 'r', encoding='utf-8') as f:
                 lines = f.read().splitlines()
@@ -48,7 +48,7 @@ class PuzzleReader:
         assert size == len(lines) - 1, f"file '{path}' contains incorrect number of lines"
         arr: List[int] = []
         for i, line in enumerate(lines[1:], start=1):
-            values = line.split()
+            values = line.split('#', 1)[0].split()
             assert len(values) == size, f"line {i} of the file '{path}' doesn't contain {size} values"
             try:
                 values = list(map(int, values))
@@ -58,5 +58,5 @@ class PuzzleReader:
         return tuple(arr), size
 
     @staticmethod
-    def _gen_puzzle(size: int) -> Tuple[int]:
+    def _gen_puzzle(size: int) -> Tuple[int, ...]:
         return make_puzzle(size, solvable=True, iterations=10000)

@@ -1,0 +1,30 @@
+# This puzzle is solvable
+3
+7 4 5
+2 0 8
+6 1 3
+
+# -f=uniform
+# Complexity in time: 151882
+# Complexity in size: 131000
+# Steps: 24
+
+# -f=hamming
+# Complexity in time: 22959
+# Complexity in size: 15297
+# Steps: 24
+
+# -f=manhattan
+# Complexity in time: 1086
+# Complexity in size: 704
+# Steps: 24
+
+# -f=euclidean
+# Complexity in time: 4158
+# Complexity in size: 2673
+# Steps: 24
+
+# -f=linear_conflict
+# Complexity in time: 1939
+# Complexity in size: 1170
+# Steps: 24

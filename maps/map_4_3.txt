@@ -1,0 +1,17 @@
+# This puzzle is solvable
+4
+ 4  9  8 13
+ 1  0  6 11
+14  3 12  7
+ 2  5 10 15
+
+# -f=manhattan
+# Complexity in time: 1668479
+# Complexity in size: 935206
+# Steps: 48
+
+# -f=linear_conflict
+# Complexity in time: 2189554
+# Complexity in size: 1090159
+# Steps: 48
+
