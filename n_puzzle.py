@@ -1,7 +1,7 @@
 import argparse
 from typing import Optional
 
-from src import PuzzleReader, PuzzleSolver, Heuristic
+from src import PuzzleReader, PuzzleSolver, Heuristic, FinalPuzzle
 
 
 def main(path: Optional[str], size: Optional[int], heuristic: Heuristic = Heuristic.manhattan,
@@ -20,7 +20,8 @@ if __name__ == '__main__':
     group_2 = parser.add_mutually_exclusive_group(required=True)
     group_2.add_argument('--result_path', type=str, help='path to the file with final n-puzzle')
     group_2.add_argument(
-        '-r', '--result', type=Heuristic.from_string, choices=list(Heuristic), default=FinalPuzzle.manhattan
+        '-r', '--result', type=FinalPuzzle.from_string, choices=list(FinalPuzzle),
+        default=FinalPuzzle.direct_top_left_to_right
     )
     parser.add_argument(
         '-f', '--heuristic', type=Heuristic.from_string, choices=list(Heuristic), default=Heuristic.manhattan,
