@@ -6,11 +6,13 @@
  7  9 11  8
 
 # -f=linear_conflict
-# Complexity in time: 480963
-# Complexity in size: 242579
+# Complexity in time: 51621
+# Complexity in size: 27320
 # Steps: 50
+# Passed time: 5.033964395523071 sec
 
 # -f=manhattan
 # Complexity in time: 776706
-# Complexity in size: 429308
+# Complexity in size: 429309
 # Steps: 50
+# Passed time: 31.906755685806274 sec

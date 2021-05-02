@@ -46,7 +46,7 @@ def snake(size: int, left: bool, top: bool, direction: bool) -> Puzzle:
                     arr[i:size * size:size] = arr[i:size * size:size][::-1]
 
     arr[arr.index(size ** 2)] = 0
-    return arr, 0, None
+    return tuple(arr), 0, None
 
 
 def spiral(size: int, left: bool, top: bool, direction: bool) -> Puzzle:
@@ -91,7 +91,6 @@ def spiral(size: int, left: bool, top: bool, direction: bool) -> Puzzle:
     dirs_i = 0
     value = 1
     while value <= size ** 2:
-        print(f'x: {x}, y: {y}, value: {value}, left_max: {left_max}, right_max: {right_max}, top_max: {top_max}, bottom_max: {bottom_max}')
         inner_x, inner_y = dirs[dirs_i]
         arr[size * y + x] = value
         if inner_x != 0:
@@ -100,39 +99,61 @@ def spiral(size: int, left: bool, top: bool, direction: bool) -> Puzzle:
                     x += inner_x
                     if x == right_max:
                         right_max -= 1
-                        dirs_i = (dirs_i + 1) % size
+                        dirs_i = (dirs_i + 1) % len(dirs)
             else:
                 if x >= left_max:
                     x += inner_x
                     if x == left_max:
                         left_max += 1
-                        dirs_i = (dirs_i + 1) % size
+                        dirs_i = (dirs_i + 1) % len(dirs)
         else:  # inner_y != 0
             if inner_y > 0:
                 if y <= bottom_max:
                     y += inner_y
                     if y == bottom_max:
                         bottom_max -= 1
-                        dirs_i = (dirs_i + 1) % size
+                        dirs_i = (dirs_i + 1) % len(dirs)
             else:
                 if y >= top_max:
                     y += inner_y
                     if y == top_max:
                         top_max += 1
-                        dirs_i = (dirs_i + 1) % size
+                        dirs_i = (dirs_i + 1) % len(dirs)
         value += 1
         i += 1
 
-    print(arr, left, top, direction)
-
     arr[arr.index(size ** 2)] = 0
-    return arr, 0, None
+    return tuple(arr), 0, None
 
 
 def direct(size: int, left: bool, top: bool, direction: bool) -> Puzzle:
-    arr = [0 for _ in range(size ** 2)]
+    if direction:
+        arr = list(range(1, size ** 2 + 1))
 
-    return arr, 0, None
+        if not top:
+            arr = arr[::-1]
+
+        for i in range(size):
+            if top and not left:
+                arr[i * size:(i + 1) * size] = arr[i * size:(i + 1) * size][::-1]
+            elif not top and left:
+                arr[i * size:(i + 1) * size] = arr[i * size:(i + 1) * size][::-1]
+    else:
+        arr = []
+        for i in range(1, size + 1):
+            arr.extend(list(range(i, size ** 2 + 1, size)))
+
+        if not left:
+            arr = arr[::-1]
+
+        for i in range(size):
+            if left and not top:
+                arr[i:size * size:size] = arr[i:size * size:size][::-1]
+            elif not left and top:
+                arr[i:size * size:size] = arr[i:size * size:size][::-1]
+
+    arr[arr.index(size ** 2)] = 0
+    return tuple(arr), 0, None
 
 
 class FinalPuzzle(Enum):
@@ -179,15 +200,13 @@ class FinalPuzzle(Enum):
 
 def main():
     from puzzle_solver import PuzzleSolver
-    size = 3
-    PuzzleSolver.print(spiral(size, left=True, top=True, direction=True)[0], size)
-    PuzzleSolver.print(spiral(size, left=True, top=True, direction=False)[0], size)
-    PuzzleSolver.print(spiral(size, left=False, top=True, direction=True)[0], size)
-    PuzzleSolver.print(spiral(size, left=False, top=True, direction=False)[0], size)
-    PuzzleSolver.print(spiral(size, left=True, top=False, direction=True)[0], size)
-    PuzzleSolver.print(spiral(size, left=True, top=False, direction=False)[0], size)
-    PuzzleSolver.print(spiral(size, left=False, top=False, direction=True)[0], size)
-    PuzzleSolver.print(spiral(size, left=False, top=False, direction=False)[0], size)
+    for size in [3, 4]:
+        for final_puzzle in list(FinalPuzzle):
+            for left in [False, True]:
+                for top in [False, True]:
+                    for direction in [False, True]:
+                        print(f'{final_puzzle}, {size}, {left}, {top}, {direction}')
+                        PuzzleSolver.print(final_puzzle(size, left=left, top=top, direction=direction)[0], size)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,13 @@
+# This puzzle is solvable
+5
+ 1  2  0  8  4
+11  6  3  7 10
+12 17 18  5  9
+16 20 13 19 24
+21 22 23 15 14
+
+# -f=linear_conflict
+# Complexity in time: 36548
+# Complexity in size: 17006
+# Steps: 42
+# Passed time: 5.657776594161987 sec

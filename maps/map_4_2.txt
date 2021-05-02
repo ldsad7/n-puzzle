@@ -7,5 +7,6 @@
 
 # -f=linear_conflict
 # Complexity in time: 482979
-# Complexity in size: 264029
+# Complexity in size: 264030
 # Steps: 56
+# Passed time: 59.1364266872406 sec

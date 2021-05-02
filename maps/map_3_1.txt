@@ -4,27 +4,32 @@
 2 0 8
 6 1 3
 
-# -f=uniform
-# Complexity in time: 151882
-# Complexity in size: 131000
+# -f=linear_conflict
+# Complexity in time: 473
+# Complexity in size: 295
 # Steps: 24
-
-# -f=hamming
-# Complexity in time: 22959
-# Complexity in size: 15297
-# Steps: 24
+# Passed time: 0.019999265670776367 sec
 
 # -f=manhattan
 # Complexity in time: 1086
-# Complexity in size: 704
+# Complexity in size: 705
 # Steps: 24
+# Passed time: 0.016002655029296875 sec
 
 # -f=euclidean
 # Complexity in time: 4158
-# Complexity in size: 2673
+# Complexity in size: 2674
 # Steps: 24
+# Passed time: 0.07499575614929199 sec
 
-# -f=linear_conflict
-# Complexity in time: 1939
-# Complexity in size: 1170
+# -f=hamming
+# Complexity in time: 22959
+# Complexity in size: 15298
 # Steps: 24
+# Passed time: 0.21996712684631348 sec
+
+# -f=uniform
+# Complexity in time: 151882
+# Complexity in size: 131001
+# Steps: 24
+# Passed time: 2.0167787075042725 sec
