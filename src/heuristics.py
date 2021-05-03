@@ -2,32 +2,51 @@ from collections import defaultdict
 from enum import Enum
 from functools import partial
 from math import sqrt
-from typing import List, Set
+from typing import Tuple, Set, List
 
 
 def uniform(*_) -> float:
     return 0
 
 
-def hamming(arr: List[int], final_arr: List[int], _: int) -> float:
+def hamming(arr: Tuple[int, ...], final_arr: Tuple[int, ...], _: int) -> float:
     return sum(1 for elem1, elem2 in zip(arr, final_arr) if elem1 != elem2 and elem1 != 0)
 
 
-def manhattan(arr: List[int], final_arr: List[int], size: int) -> float:
+def gaschnig(arr: Tuple[int, ...], final_arr: Tuple[int, ...], size: int) -> float:
+    count = 0
+    list_arr: List[int] = list(arr)
+    final_list_arr: List[int] = list(final_arr)
+    while list_arr != final_list_arr:
+        index_1 = list_arr.index(0)
+        index_2 = list_arr.index(final_list_arr[index_1])
+        if index_1 == index_2:
+            i = 0
+            for i in range(size * size):
+                if list_arr[size * size - 1 - i] != final_list_arr[size * size - 1 - i]:
+                    break
+            list_arr[index_1], list_arr[size * size - 1 - i] = list_arr[size * size - 1 - i], list_arr[index_1]
+        else:
+            list_arr[index_1], list_arr[index_2] = list_arr[index_2], list_arr[index_1]
+        count += 1
+    return count
+
+
+def manhattan(arr: Tuple[int, ...], final_arr: Tuple[int, ...], size: int) -> float:
     return sum(
         abs(i // size - final_arr.index(elem) // size) + abs(i % size - final_arr.index(elem) % size)
         for i, elem in enumerate(arr) if elem != 0
     )
 
 
-def euclidean(arr: List[int], final_arr: List[int], size: int) -> float:
+def euclidean(arr: Tuple[int, ...], final_arr: Tuple[int, ...], size: int) -> float:
     return sum(
         sqrt((i // size - final_arr.index(elem) // size) ** 2 + (i % size - final_arr.index(elem) % size) ** 2)
         for i, elem in enumerate(arr) if elem != 0
     )
 
 
-def linear_conflict(arr: List[int], final_arr: List[int], size: int) -> float:
+def linear_conflict(arr: Tuple[int, ...], final_arr: Tuple[int, ...], size: int) -> float:
     def count_lc(elems: Set[int]) -> int:
         inner_lc = 0
         indices = sorted((arr.index(elem), final_arr.index(elem)) for elem in elems)
@@ -57,8 +76,10 @@ def linear_conflict(arr: List[int], final_arr: List[int], size: int) -> float:
 class Heuristic(Enum):
     uniform = partial(uniform)
     hamming = partial(hamming)
-    manhattan = partial(manhattan)
+    gaschnig = partial(gaschnig)
     euclidean = partial(euclidean)
+    manhattan = partial(manhattan)
+
     linear_conflict = partial(linear_conflict)
 
     def __call__(self, *args, **kwargs):

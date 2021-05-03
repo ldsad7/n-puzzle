@@ -22,6 +22,12 @@
 # Steps: 24
 # Passed time: 0.07499575614929199 sec
 
+# -f=gaschnig
+# Complexity in time: 13576
+# Complexity in size: 8661
+# Steps: 24
+# Passed time: 0.20598721504211426 sec
+
 # -f=hamming
 # Complexity in time: 22959
 # Complexity in size: 15298
