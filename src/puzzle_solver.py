@@ -24,11 +24,12 @@ class Colors:
 
 class PuzzleSolver:
     def __init__(self, size: int, heuristic: Heuristic = Heuristic.manhattan,
-                 greedy: bool = False, verbose: bool = False):
+                 greedy: bool = False, verbose: bool = False, visualization: bool = False):
         self.size = size
         self.heuristic = heuristic
         self.step = 0 if greedy else 1
         self.verbose = verbose
+        self.visualization = visualization
 
     def is_solvable(self, puzzle: Puzzle):
         num_of_inversions = 0
@@ -60,35 +61,44 @@ class PuzzleSolver:
 
     def print_full_path(self, puzzle: Puzzle, complexity_in_time: int, complexity_in_size: int,
                         passed_time: float) -> None:
-        print(f'{Colors.CYAN}greedy search{Colors.ENDC}: '
-              f'{Colors.RED + "NO" if self.step else Colors.GREEN + "YES"}{Colors.ENDC}')
-        print(f'{Colors.CYAN}uniform cost search{Colors.ENDC}: '
-              f'{Colors.GREEN + "YES" if self.heuristic == Heuristic.uniform else Colors.RED + "NO"}{Colors.ENDC}')
-        print(f'{Colors.CYAN}solvable{Colors.ENDC}: {Colors.GREEN}YES{Colors.ENDC}')
-        print(f'{Colors.YELLOW}heuristic function{Colors.ENDC}: {Colors.GREEN}{self.heuristic.name}{Colors.ENDC}')
-        print(f'{Colors.CYAN}puzzle size{Colors.ENDC}: {Colors.GREEN}{self.size}{Colors.ENDC}')
         path: List[Tuple[int, ...]] = []
         while puzzle is not None:
             path.append(puzzle[0])
             puzzle = puzzle[2]
-        print(f'{Colors.CYAN}initial state{Colors.ENDC}: {Colors.GREEN}{path[-1]}{Colors.ENDC}')
-        print(f'{Colors.CYAN}final state{Colors.ENDC}: {Colors.GREEN}{path[0]}{Colors.ENDC}')
-        print(f'{Colors.YELLOW}heuristic score for initial state:{Colors.ENDC}')
-        for heuristic in list(Heuristic):
-            print(f'\t- {Colors.PINK}{heuristic.name}{Colors.ENDC}: '
-                  f'{Colors.BOLD}{heuristic(path[-1], path[0], self.size)}{Colors.ENDC}')
-        print(f'{Colors.RED}search algorithm{Colors.ENDC}: {Colors.BLUE}A*{Colors.ENDC}')
-        print(f'{Colors.BOLD}solution{Colors.ENDC}: {Colors.CYAN}')
-        self.print(path[-1], self.size)
-        print(Colors.ENDC, end='')
-        for arr in path[-2::-1]:
-            print(f'{Colors.BOLD}>{Colors.ENDC}{Colors.CYAN}')
-            self.print(arr, self.size)
+        if self.visualization:
+            moves_arr = []
+            for i in range(len(path) - 1, 0, -1):
+                moves_arr.append((path[i].index(0), path[i - 1].index(0)))
+            print(f'size = {self.size}\n'
+                  f'startIntArray = {list(path[-1])}\n'
+                  f'finalIntArray = {list(path[0])}\n'
+                  f'let inputMovesArray = {moves_arr}')
+        else:
+            print(f'{Colors.CYAN}greedy search{Colors.ENDC}: '
+                  f'{Colors.RED + "NO" if self.step else Colors.GREEN + "YES"}{Colors.ENDC}')
+            print(f'{Colors.CYAN}uniform cost search{Colors.ENDC}: '
+                  f'{Colors.GREEN + "YES" if self.heuristic == Heuristic.uniform else Colors.RED + "NO"}{Colors.ENDC}')
+            print(f'{Colors.CYAN}solvable{Colors.ENDC}: {Colors.GREEN}YES{Colors.ENDC}')
+            print(f'{Colors.YELLOW}heuristic function{Colors.ENDC}: {Colors.GREEN}{self.heuristic.name}{Colors.ENDC}')
+            print(f'{Colors.CYAN}puzzle size{Colors.ENDC}: {Colors.GREEN}{self.size}{Colors.ENDC}')
+            print(f'{Colors.CYAN}initial state{Colors.ENDC}: {Colors.GREEN}{path[-1]}{Colors.ENDC}')
+            print(f'{Colors.CYAN}final state{Colors.ENDC}: {Colors.GREEN}{path[0]}{Colors.ENDC}')
+            print(f'{Colors.YELLOW}heuristic score for initial state:{Colors.ENDC}')
+            for heuristic in list(Heuristic):
+                print(f'\t- {Colors.PINK}{heuristic.name}{Colors.ENDC}: '
+                      f'{Colors.BOLD}{heuristic(path[-1], path[0], self.size)}{Colors.ENDC}')
+            print(f'{Colors.RED}search algorithm{Colors.ENDC}: {Colors.BLUE}A*{Colors.ENDC}')
+            print(f'{Colors.BOLD}solution{Colors.ENDC}: {Colors.CYAN}')
+            self.print(path[-1], self.size)
             print(Colors.ENDC, end='')
-        print(f'{Colors.YELLOW}Complexity in time{Colors.ENDC}: {Colors.PINK}{complexity_in_time}{Colors.ENDC}')
-        print(f'{Colors.YELLOW}Complexity in size{Colors.ENDC}: {Colors.PINK}{complexity_in_size}{Colors.ENDC}')
-        print(f'{Colors.YELLOW}Steps{Colors.ENDC}: {Colors.PINK}{len(path) - 1}{Colors.ENDC}')
-        print(f'{Colors.YELLOW}Passed time{Colors.ENDC}: {Colors.PINK}{passed_time} sec{Colors.ENDC}')
+            for arr in path[-2::-1]:
+                print(f'{Colors.BOLD}>{Colors.ENDC}{Colors.CYAN}')
+                self.print(arr, self.size)
+                print(Colors.ENDC, end='')
+            print(f'{Colors.YELLOW}Complexity in time{Colors.ENDC}: {Colors.PINK}{complexity_in_time}{Colors.ENDC}')
+            print(f'{Colors.YELLOW}Complexity in size{Colors.ENDC}: {Colors.PINK}{complexity_in_size}{Colors.ENDC}')
+            print(f'{Colors.YELLOW}Steps{Colors.ENDC}: {Colors.PINK}{len(path) - 1}{Colors.ENDC}')
+            print(f'{Colors.YELLOW}Passed time{Colors.ENDC}: {Colors.PINK}{passed_time} sec{Colors.ENDC}')
 
     def get_adjacent_arrays(self, arr: Tuple[int, ...]) -> Set[Tuple[int, ...]]:
         index = arr.index(0)

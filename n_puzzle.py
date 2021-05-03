@@ -7,10 +7,10 @@ from src import PuzzleReader, PuzzleSolver, Heuristic, FinalPuzzle
 def main(path: Optional[str], result_path: Optional[str], size: Optional[int],
          heuristic: Heuristic = Heuristic.manhattan,
          final_puzzle_func: FinalPuzzle = FinalPuzzle.direct_top_left_to_right, greedy: bool = False,
-         verbose: bool = False):
+         verbose: bool = False, visualization: bool = False):
     puzzle_reader: PuzzleReader = PuzzleReader(verbose)
     puzzle, puzzle_size = puzzle_reader.read(path, size)
-    puzzle_solver: PuzzleSolver = PuzzleSolver(puzzle_size, heuristic, greedy, verbose)
+    puzzle_solver: PuzzleSolver = PuzzleSolver(puzzle_size, heuristic, greedy, verbose, visualization)
     if result_path is not None:
         final_puzzle, final_puzzle_size = puzzle_reader.read(result_path, size)
     else:
@@ -36,8 +36,10 @@ if __name__ == '__main__':
     )
     parser.add_argument('-g', '--greedy', action='store_true', default=False, help='is greedy search')
     parser.add_argument('-v', '--verbose', action='store_true', help='verbose output')
+    parser.add_argument('-vis', '--visualization', action='store_true', help='verbose output')
     args = parser.parse_args()
     try:
-        main(args.path, args.result_path, args.size, args.heuristic, args.result, args.greedy, args.verbose)
+        main(args.path, args.result_path, args.size, args.heuristic, args.result, args.greedy, args.verbose,
+             args.visualization)
     except Exception as e:
         print(f'Произошла ошибка: {e}')
