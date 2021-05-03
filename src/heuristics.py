@@ -21,27 +21,25 @@ def gaschnig(arr: Tuple[int, ...], final_arr: Tuple[int, ...], size: int) -> flo
         index_1 = list_arr.index(0)
         index_2 = list_arr.index(final_list_arr[index_1])
         if index_1 == index_2:
-            i = 0
-            for i in range(size * size):
-                if list_arr[size * size - 1 - i] != final_list_arr[size * size - 1 - i]:
+            index_2 = 0
+            for index_2 in range(size * size):
+                if list_arr[index_2] != final_list_arr[index_2]:
                     break
-            list_arr[index_1], list_arr[size * size - 1 - i] = list_arr[size * size - 1 - i], list_arr[index_1]
-        else:
-            list_arr[index_1], list_arr[index_2] = list_arr[index_2], list_arr[index_1]
+        list_arr[index_1], list_arr[index_2] = list_arr[index_2], list_arr[index_1]
         count += 1
     return count
-
-
-def manhattan(arr: Tuple[int, ...], final_arr: Tuple[int, ...], size: int) -> float:
-    return sum(
-        abs(i // size - final_arr.index(elem) // size) + abs(i % size - final_arr.index(elem) % size)
-        for i, elem in enumerate(arr) if elem != 0
-    )
 
 
 def euclidean(arr: Tuple[int, ...], final_arr: Tuple[int, ...], size: int) -> float:
     return sum(
         sqrt((i // size - final_arr.index(elem) // size) ** 2 + (i % size - final_arr.index(elem) % size) ** 2)
+        for i, elem in enumerate(arr) if elem != 0
+    )
+
+
+def manhattan(arr: Tuple[int, ...], final_arr: Tuple[int, ...], size: int) -> float:
+    return sum(
+        abs(i // size - final_arr.index(elem) // size) + abs(i % size - final_arr.index(elem) % size)
         for i, elem in enumerate(arr) if elem != 0
     )
 
@@ -79,7 +77,6 @@ class Heuristic(Enum):
     gaschnig = partial(gaschnig)
     euclidean = partial(euclidean)
     manhattan = partial(manhattan)
-
     linear_conflict = partial(linear_conflict)
 
     def __call__(self, *args, **kwargs):
