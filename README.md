@@ -2,12 +2,15 @@ The file `en.subject.pdf` describes the task
 
 Steps:
 - `python -m venv myvenv`
-- `source myvenv\bin\activate`
+- `source myvenv/bin/activate`
 - `python -m pip install -r requirements.txt`
 
 Commands:
-- `python src/npuzzle_gen.py -s > maps/tmp_map.txt`
-- `python n_puzzle.py `
+- `python src/npuzzle_gen.py -s 3 > tmp_map.txt`
+- `python n_puzzle.py -p maps/map_3_1.txt -f=linear_conflict -r=spiral_top_left_to_bottom`
+- `python n_puzzle.py -p maps/map_3_1.txt -f=linear_conflict -r=spiral_top_left_to_bottom -vis`
+- `python n_puzzle.py -p maps/map_4_3.txt -f=linear_conflict --result_path=final_maps/map_4_1.txt`
+- `python n_puzzle.py -p maps/map_4_3.txt -f=linear_conflict --result_path=final_maps/map_4_1.txt -vis`
 
 Usages:
 - `usage: npuzzle_gen.py [-h] (-s | -u) [-i ITERATIONS] size`
@@ -18,8 +21,9 @@ Pep8:
 
 Used heuristics:
 - Hamming distance (https://en.wikipedia.org/wiki/Hamming_distance)
+- Gaschnig distance (https://cse.sc.edu/~mgv/csce580f08/gradPres/slidingPuzzlesHeuristicsCaoGause.ppt)
 - Manhattan distance (https://en.wikipedia.org/wiki/Taxicab_geometry)
-- Euclidean distance (https://en.wikipedia.org/wiki/Euclidean_distance) 
+- Euclidean distance (https://en.wikipedia.org/wiki/Euclidean_distance)
 - Linear Conflict (http://academiccommons.columbia.edu/download/fedora_content/download/ac:141290/CONTENT/cucs-219-85.pdf)
 - Uniform distance (=0, -u)
 - Greedy search (-g)
